@@ -1,20 +1,22 @@
 import requests
 
-def send_telegram_message(msg):
-
+def send_telegram_message(msg, parse_mode=None):
     # Your bot's token
-    #bot_token = "6558272038:AAGOXAneBcu0dQ8OE18O_401opjjrYLVuB0"
     bot_token = "6412072616:AAEzcimx6m85mSDiazMhV_oy1-45FtBQeXw"
 
     # The chat ID of the channel (replace with your channel's chat ID)
-    bot_id = "@Amits_screener_bot"
     channel_id = "@amitscreenerbot"
 
     # Send the message
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     data = {
         "chat_id": channel_id,
-        "text": msg
+        "text": msg,
+        "parse_mode": parse_mode  # This can be "Markdown", "MarkdownV2", "HTML", or None
     }
-    response = requests.post(url, data=data)
+    # Remove parse_mode from the data if it's not specified to avoid sending it as None
+    if parse_mode is None:
+        data.pop("parse_mode")
+
+    response = requests.post(url, json=data)  # Use json instead of data for correct headers
     print(response.json())
